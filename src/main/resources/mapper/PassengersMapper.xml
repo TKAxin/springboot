@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpx.springboot.mapper.PassengersMapper">
+
+    <resultMap id="pas_apply" type="com.xpx.springboot.entity.Passengers">
+        <id property="id" column="id"/>
+<!--        <result property="name" column="name" />-->
+<!--        <collection property="pasQsList" column="id"-->
+<!--                    select="com.xpx.springboot.mapper.PasQsMapper.selectByPID">-->
+<!--        </collection>-->
+    </resultMap>
+
+    <select id="getPasQs" resultMap="pas_apply">
+        SELECT * FROM pas_qs,pas_apply
+        <where>
+            pas_qs.pas_id = pas_apply.pas_id
+        </where>
+    </select>
+
+    <select id="getPasQsByName" resultMap="pas_apply">
+        SELECT * FROM pas_qs,pas_apply
+        <where>
+            pas_qs.pas_id = pas_apply.pas_id
+            <if test="name != null"> AND pas_apply.name = #{name} </if>
+        </where>
+    </select>
+
+<!--===============================================================================-->
+    <select id="getPasHealth" resultType="com.xpx.springboot.entity.Passengers">
+        SELECT * FROM pas_health,pas_apply,pas_qs
+        <where>
+            pas_apply.pas_id = pas_health.pas_id AND pas_apply.pas_id = pas_qs.pas_id
+        </where>
+    </select>
+
+    <select id="getPasHealthByName" resultType="com.xpx.springboot.entity.Passengers">
+        SELECT * FROM pas_health,pas_apply,pas_qs
+        <where>
+            pas_apply.pas_id = pas_health.pas_id AND pas_apply.pas_id = pas_qs.pas_id
+            <if test="name != null"> AND pas_apply.name = #{name} </if>
+        </where>
+    </select>
+
+</mapper>
